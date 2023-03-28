@@ -50,7 +50,8 @@ Below, we'll solve this problem three different ways, using iterate, scan, and d
 
 **enter answer in `answers.md`**
 
-.  
+. 
+   
 .  
 
 

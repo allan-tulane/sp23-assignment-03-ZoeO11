@@ -35,15 +35,18 @@ def parens_match_iterative(mylist):
       mylist...a list of strings
     Returns
       True if the parenthesis are matched, False otherwise
-      
+    
     e.g.,
     >>>parens_match_iterative(['(', 'a', ')'])
     True
     >>>parens_match_iterative(['('])
     False
     """
-    ### TODO
-    pass
+    check = iterate(parens_update,1,mylist)
+    if check == 1:
+      return True
+    else:
+      return False
 
 
 def parens_update(current_output, next_input):
@@ -59,8 +62,14 @@ def parens_update(current_output, next_input):
       the updated value of `current_output`
     """
     ###TODO
-    pass
-
+    if next_input == '(':
+      return current_output + 1
+    if next_input == ')':
+      if current_output > 1:
+        return current_output -1
+      return False
+    return current_output
+    
 
 def test_parens_match_iterative():
     assert parens_match_iterative(['(', ')']) == True
@@ -85,11 +94,12 @@ def parens_match_scan(mylist):
     True
     >>>parens_match_scan(['('])
     False
-    
     """
     ###TODO
-    pass
-
+    my_map = list(map(paren_map,mylist))
+    my_scan = scan(lambda x,y:x+y,[],my_map)
+    my_reduce = reduce(min_f,0,my_scan[0]) >= 0 and my_scan[1] == 0
+    return my_reduce
 def scan(f, id_, a):
     """
     This is a horribly inefficient implementation of scan
@@ -160,11 +170,29 @@ def parens_match_dc_helper(mylist):
       L is the number of unmatched left parentheses. This output is used by 
       parens_match_dc to return the final True or False value
     """
-    ###TODO
-    pass
+    if len(mylist) == 0:
+      return (0,0)
+    if len(mylist) == 1:
+        if mylist[0] == '(':
+          return(0,1)
+        elif mylist[0] == ')':
+          return(1,0)
+        else:
+          return(0,0) 
+    else:
+      L = parens_match_dc_helper(mylist[len(mylist)//2:])
+      R  = parens_match_dc_helper(mylist[:len(mylist)//2])
+      mytup = (L[0]+R[0],L[1]+R[1])
+      if mytup[0] >= mytup[1]:
+        return (mytup[0] - mytup[1], 0)
+      else:
+        return (0, mytup[1] - mytup[0])
+
+  
     
 
 def test_parens_match_dc():
     assert parens_match_dc(['(', ')']) == True
     assert parens_match_dc(['(']) == False
     assert parens_match_dc([')']) == False
+test_parens_match_dc()
